@@ -1,0 +1,52 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<h1>Admin dashboard</h1>
+
+<h2>Users</h2>
+
+<table class="table">
+    <tr>
+        <th>ID (username)</th>
+        <th>email</th>
+        <th>name</th>
+        <th>affiliation</th>
+        <th>country</th>
+        <th>verified?</th>
+    </tr>
+    {% for row in data.users %}
+    <tr>
+        <td>{{ row.user.id }} ({{ row.user.username }}) </td>
+        <td>{{ row.user.email }}</td>
+        <td>{{ row.user.first_name}} {{row.user.last_name}}</td>
+        <td>{{ row.profile.affiliation }}</td>
+        <td>{{ row.profile.country }}</td>
+        <td>{{ row.profile.verified_at }}</td>
+    </tr>
+    {% endfor %}
+</table>
+
+<h2>Submissions</h2>
+<table class="table">
+    <tr>
+        <th>submission ID</th>
+        <th>username</th>
+        <th>submitted at</th>
+        <th>path</th>
+        <th>{{ score_types.0 }} score</th>
+        <th>{{ score_types.1 }} score</th>
+    </tr>
+    {% for row in data.submissions %}
+    <tr>
+        <td>{{ row.id }}</td>
+        <td>{{ row.username }}</td>
+        <td>{{ row.submitted_at }}</td>
+        <td>{{ row.path }}</td>
+        <td>{{ row.score0 }}</td>
+        <td>{{ row.score1 }}</td>
+    </tr>
+    {% endfor %}
+</table>
+
+{% endblock %}

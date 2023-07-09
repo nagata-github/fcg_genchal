@@ -1,0 +1,188 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block content %}
+<div>
+    <h1>GenChal 2022: Feedback Comment Generation</h1>
+</div>
+
+<p>Ryo Nagata, Masato Hagiwara, Kazuaki Hanawa, Masato Mita</p>
+
+<h2>Task description</h2>
+
+<p><i>Feedback comment generation</i> is a task where, given an input text and positions (where to
+    comment), a system generates hints or explanatory notes (hereafter, feedback comments)
+    useful for language learners. </p>
+
+<p></p>For example, given a sentence with a position (<i>agrees the</i>): </p>
+
+<blockquote>
+    <i>*He agrees the opinion. </i>
+</blockquote>
+
+<p>The task is to generate a feedback comment such as: </p>
+
+<blockquote>
+    <i>The verb agree is an intransitive verb and cannot take direct objects. Add the appropriate preposition. </i>
+</blockquote>
+
+<p>The goal of the task is to generate feedback comments explaining to the writer why the range in
+    question is erroneous possibly with related writing rules. Note that just pointing out an error is
+    not enough in this task (in order to make the task different from grammatical error detection).
+    Likewise just giving the correct form is not enough (difference from grammatical error
+    correction). Also note that the feedback comments in the provided dataset are designed to try to
+    avoid giving explicit corrections and instead to provide something that prompts the write to come
+    up with a solution (Admittedly, there are feedback comments giving explicit corrections).</p>
+
+<h2>Task definition</h2>
+
+<p>Since unconstrained feedback comment generation is a difficult task, we put some constraints in
+    this generation challenge. We limit the target only to proposition uses. It should be emphasized
+    that the target includes missing prepositions, to-infinitives, and deverbal prepositions (e.g.,
+    including) in preposition uses. Specifically, participants develop systems that automatically
+    generate feedback comments in response to preposition uses such as the example shown
+    above. We also assume that we know where the target positions are (for example, the words
+    “agree the” in the example above). </p>
+
+<p>Input:</p>
+<ol>
+    <li>Pre-tokenized English sentences written by non-native learners (list of string)</li>
+    <li>Offset ranges (pairs of integers)</li>
+</ol>
+
+<p>An offset is a range denoted by two integers (start character index, end character index; starting
+    from 0) separated by ‘:’. It specifies where to generate a comment. For example, the offset for
+    the sentence:</p>
+
+<blockquote>
+    <i>*He agrees the opinion. </i>
+</blockquote>
+
+<p>is 3:13.</p>
+
+<p>Output: </p>
+<p>A feedback comment per an offset range, or <code>&lt;NO_COMMENT&gt;</code></p>
+
+<p>Task: </p>
+<p>Given an input sentence and an offset range, generate an appropriate feedback comment in
+    English. The length of the generated feedback comment should be less than 500 characters
+    including blanks. The task is to generate a feedback comment to each pair of an English
+    sentence and an offset. The special output token <code>&lt;NO_COMMENT&gt;</code> is allowed to indicate that
+    the system cannot generate any reliable feedback comment. This allows us to calculate recall,
+    precision, and F1 as explained below.</p>
+
+<h2>Data format</h2>
+
+<ol>
+    <li>
+        <p>Training/development data</p>
+        <p>The file contains one sentence per line, which consists of:</p>
+
+        <pre>input sentence [\t] offset range [\t] feedback comment </pre>
+
+        <p>Fields are separated by tabs (\t).</p>
+    </li>
+    <li>
+        <p>Test data</p>
+        <p>The format is basically the same as that of training/development data, except that it always
+            consists of the first and second fields and the third one (the feedback comment) is missing.</p>
+    </li>
+    <li>
+        <p>Output (for submission) </p>
+        <p>The system output should follow the same format as that of training/development data where the third field is the system output (generated feedback comment).</p>
+
+        <p>If the system fails to generate a feedback comment for the given sentence and offset, then use a special token <code>&lt;NO_COMMENT&gt;</code>.</p>
+
+        <p>The orders of the system outputs must be identical to those of the target sentences in the test data.</p>
+
+        <p>Participants submit their system outputs via the generation challenge Web page:
+            <a href="https://fcg.sharedtask.org/">https://fcg.sharedtask.org/</a></p>
+    </li>
+</ol>
+
+<h2>Evaluation</h2>
+
+<ol>
+    <li>
+        <p>Manual evaluation</p>
+        <p>1.1 Manual evaluation by organizer</p>
+
+        <p>Each system output is manually compared to the corresponding reference feedback comment
+            (a manually created feedback comment) to evaluate generation results. To be precise, a system
+            output is regarded as appropriate if (1) it contains information similar to the reference and (2) it
+            does not contain information that is irrelevant to the offset; it may contain information that the
+            reference does not contain as long as it is relevant to the offset. If these conditions are met, the
+            output is labeled as correct. The performance is measured by recall, precision, and F1 based on
+            correct/incorrect outputs.</p>
+
+        <p>System outputs with <code>&lt;NO_COMMENT&gt;</code> are excluded from both the numerator and the
+            denominator of precision and from the numerator of recall. Namely, a system can “skip” an input
+            sentence without hurting precision if it is not confident enough.</p>
+
+        <p>1.2 Manual evaluation by participants</p>
+
+        <p>Participants will have a chance to do their own evaluation of their system outputs. Once the
+            organizers return the evaluation results to the participants, they can revise the evaluation results
+            if they need to change the judgments. This only applies to their own system outputs.</p>
+
+        <p>In this evaluation, the above condition (1) is relaxed and the other conditions are kept as they
+            are. The condition (1) is redefined that generated feedback comments may be evaluated as
+            correct even if its content is not similar to the reference as long as it is appropriate for the given
+            offset.</p>
+
+        <p>Participants may upload their manual evaluation results through the webpage.</p>
+    </li>
+    <li>
+        <p>Automatic evaluation</p>
+
+        <p>
+            The BLEU score is calculated between the system output and the oracle feedback comment. Define (an extended version of) recall and precision as follows:
+        </p>
+        <ul>
+                <li>recall = (sum of BLUE for each generation) / (number of expected feedback comments)</li>
+                <li>precision = (sum of BLUE for each generation) / (number of generations excluding <code>&lt;NO_COMMENT&gt;</code>)</li>
+        </ul>
+
+        <p>Then, F1is calculated based on this recall and precision. </p>
+    </li>
+</ol>
+
+<p>System ranking are determined in three ways: (i) manual evaluation by organizers); (ii)
+    participant’s manual evaluation; (iii) automated evaluation</p>
+
+<h2>Data and system releases</h2>
+
+<ol>
+    <li>
+        <p>Submitted data (System outputs)</p>
+
+        <p>We will release all system outputs to the public with manual evaluation results so that they can
+            be used for non-profit research purposes. Those who wish to participate in this generation
+            challenge have to agree on the data release.</p>
+    </li>
+
+    <li>
+        <p>System source code</p>
+
+        <p>
+            We also encourage the participants to release their systems either on the GenChal webpage or
+on their own page (and the link is shown on the GenChal webpage). This is not obligation, but is
+highly recommended. We will make a special page for this release.
+        </p>
+    </li>
+</ol>
+
+<h2>Baseline system</h2>
+
+<p>The code for the baseline system is available at <a href="https://github.com/k-hanawa/fcg_genchal2022_baseline">this Git repository</a>.</p>
+
+<p>The evaluation metrics are: </p>
+
+<ul>
+    <li>Precision: 0.44</li>
+    <li>Recall: 0.44</li>
+    <li>F1: 0.44</li>
+    <li>BLEU: 46.34</li>
+</ul>
+
+{% endblock %}

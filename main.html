@@ -1,0 +1,114 @@
+{% extends "base.html" %}
+
+{% block content %}
+  <div>
+    <h1>GenChal 2022: Feedback Comment Generation for Writing Learning</h1>
+  </div>
+
+  {% if user.is_authenticated %}
+  <h2>To-do</h2>
+  <div class="row demo-samples">
+    <div class="col">
+      <div>
+        <ul>
+          <li>
+            <i class="material-icons md-24">verified</i>
+            Verify email: {% if profile.verified_at %} VERIFIED {% else %} NOT VERIFIED {% endif %}
+          </li>
+          <li>
+            <i class="material-icons md-24">cloud_download</i>
+            Download datasets: {% if profile.downloaded_at %} DOWNLOADED {% else %} NOT DOWNLOADED {% endif %}
+          </li>
+          <li>
+            <i class="material-icons md-24">cloud_upload</i>
+            Submit results: {% if submission_exists %} SUBMITTED {% else %} NOT SUBMITTED {% endif %}
+          </li>
+          <li>
+            <i class="material-icons md-24">insert_chart_outlined</i> Show results
+          </li>
+        </ul>
+      </div><!-- /.todo -->
+    </div><!-- /.col-4 -->
+  </div>
+
+  <h2>Actions</h2>
+  <div class="row demo-tiles">
+    <div class="col">
+      <div class="tile">
+        <i class="material-icons md-48">cloud_download</i>
+        <h3 class="tile-title">Download datasets</h3>
+        <p>Download train/validation datasets for GenChal 2022: Feedback Comment Generation.</p>
+        <a class="btn btn-primary btn-large btn-block" href="{% url 'download' %}">Go to download page</a>
+      </div>
+    </div>
+
+    <div class="col">
+      <div class="tile">
+        <i class="material-icons md-48">cloud_upload</i>
+        <h3 class="tile-title">Submit paper</h3>
+        <p>Submit your paper.</p>
+        <a class="btn btn-primary btn-large btn-block" href="{% url 'paper' %}">Go to submission page</a>
+      </div>
+    </div>
+
+    <div class="col">
+      <div class="tile">
+        <i class="material-icons md-48">insert_chart_outlined</i>
+        <h3 class="tile-title">Show results</h3>
+        <p>Show your evaluation results.</p>
+        <a class="btn btn-primary btn-large btn-block" href="{% url 'results' %}">Go to the result page</a>
+      </div>
+    </div>
+
+    <div class="col">
+      <div class="tile tile-hot">
+        <i class="material-icons md-48">person</i>
+        <h3 class="tile-title">Account info</h3>
+        <p>Show your account info.</p>
+        <a class="btn btn-primary btn-large btn-block" href="{% url 'account' %}">Go to the account page</a>
+      </div>
+
+    </div>
+  </div> <!-- /tiles -->
+  {% endif %}
+
+  <h2>Task overview</h2>
+  <p><i>Feedback comment generation</i> is a task where, given an input text, a system generates hints or explanatory notes that help language learners improve their writing skills. </p>
+
+  <p>For more details of the task, refer to <a href="{% url 'task' %}">the task definition page</a> and our <a href="https://aclanthology.org/2021.inlg-1.35/">task proposal paper</a>.</p>
+
+  <p><s>Please <a href="https://fcg.sharedtask.org/register">register from here</a> in order to participate in the task. Since we'll be evaluating the submissions manually, we'll limit the total number of participating systems at around 10.</s></p>
+  <p>We closed the registration because we reached full capacity. Thank you for your interests!</p>
+
+  <p>The evaluation results are out! They can be viewed on <a href="{% url 'results' %}">the results page</a>.</p>
+
+  <h2>Important dates</h2>
+  <ul>
+    <li>28 January 2022: Kick-off and training data release</li>
+    <li>2 May 2022: Test data release</li>
+    <li>9 May 2022: Generation result submission</li>
+    <li>25 June 2022: Evaluation result notification</li>
+    <li>Paper submission (following INLG 2023)</li>
+  </ul>
+
+  <h2>Organizers</h2>
+
+  <ul>
+      <li>Ryo Nagata (Konan University / JST, PRESTO)</li>
+      <li>Masato Hagiwara (Earth Species Project / Octanove Labs)</li>
+      <li>Hanawa Kazuaki (RIKEN / Tohoku University)</li>
+      <li>Masato Mita (RIKEN / Tohoku University)</li>
+  </ul>
+
+  <h2>Links</h2>
+
+  <ul>
+    <li><a href="{% url 'links' %}">Links to systems</a></li>
+    <li><a href="{% url 'data' %}">Data release</a></li>
+  </ul>
+
+  <h2>Contact</h2>
+
+  <p>For general inquiries, please contact us at <a href="mailto: fcg-sharedtask@googlegroups.com">fcg-sharedtask@googlegroups.com</a>.</p>
+
+{% endblock %}

@@ -1,0 +1,23 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block content %}
+<div>
+    <h1>Data release</h1>
+</div>
+
+<p>You may obtain the dataset used in the shared task in the following two steps.</p>
+
+<ol>
+    <li>
+        <div>Obtain the base corpus ICNALE from:</div>
+        <div><a href="https://language.sakura.ne.jp/icnale/download.html">https://language.sakura.ne.jp/icnale/download.html</a></div>
+    </li>
+    <li>
+        <div>Send us (fcg-sharedtask[at]googlegroups.com) 
+        <a href="{% static 'terms_and_condition_for_data_release.pdf' %}">the signed term and condition of the dataset</a>
+        with a copy of the email sent from the ICNALE  site when you obtained the ICNALE data.</div>
+    </li>
+</ol>
+
+{% endblock %}
