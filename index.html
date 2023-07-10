@@ -36,12 +36,6 @@
             <div class="collapse navbar-collapse" id="navbar-collapse-01">
               <ul class="nav navbar-nav mr-auto">
                 <li><a href="/task">Task Description</a></li>
-                {% if user.is_authenticated %}
-                  <li><a href="/account">Logged in as: {{ user.username }}</a></li>
-                  <li><a href="/logout">Log out</a></li>
-                {% else %}
-                  <li><a href="/login">Log in</a></li>
-                {% endif %}
               </ul>
             </div><!-- /.navbar-collapse -->
           </nav><!-- /navbar -->
